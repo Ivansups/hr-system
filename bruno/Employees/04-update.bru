@@ -1,0 +1,15 @@
+meta {
+  name: Update employee
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}/employees/{{employeeId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {"fullName": "Ivan Petrov Jr.", "hireDate": "2024-02-01", "departmentId": {{departmentId}}, "positionId": {{positionId}}}
+}

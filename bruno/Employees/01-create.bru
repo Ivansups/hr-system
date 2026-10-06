@@ -1,0 +1,19 @@
+meta {
+  name: Create employee
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/employees
+  body: json
+  auth: none
+}
+
+body:json {
+  {"fullName": "Ivan Petrov", "hireDate": "2024-01-01", "departmentId": {{departmentId}}, "positionId": {{positionId}}}
+}
+
+script:post-response {
+  bru.setVar("employeeId", res.body.id);
+}

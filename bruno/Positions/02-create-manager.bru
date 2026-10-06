@@ -1,0 +1,15 @@
+meta {
+  name: Create MANAGER position
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/positions
+  body: json
+  auth: none
+}
+
+body:json {
+  {"type": "MANAGER", "title": "Team Lead", "baseSalary": 3000, "teamSize": 5}
+}

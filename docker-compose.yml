@@ -1,0 +1,31 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: hrsystem
+      POSTGRES_USER: hrsystem
+      POSTGRES_PASSWORD: hrsystem
+    volumes:
+      - hrsystem-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hrsystem -d hrsystem"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build:
+      context: .
+      target: server
+    ports:
+      - "8080:8080"
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/hrsystem
+      DB_USER: hrsystem
+      DB_PASSWORD: hrsystem
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  hrsystem-db-data:

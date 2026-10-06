@@ -1,0 +1,15 @@
+meta {
+  name: Create employee (400 demo)
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{baseUrl}}/employees
+  body: json
+  auth: none
+}
+
+body:json {
+  {"fullName": "", "hireDate": "2024-01-01", "departmentId": 1, "positionId": 1}
+}

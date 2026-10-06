@@ -1,0 +1,15 @@
+meta {
+  name: Create SALESPERSON position
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/positions
+  body: json
+  auth: none
+}
+
+body:json {
+  {"type": "SALESPERSON", "title": "Sales Manager", "baseSalary": 1500, "salesPercent": 5.00}
+}
