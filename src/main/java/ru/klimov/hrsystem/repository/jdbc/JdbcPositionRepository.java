@@ -34,7 +34,7 @@ public final class JdbcPositionRepository implements ru.klimov.hrsystem.reposito
                 connection.setAutoCommit(true);
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Failed to save position", e);
+            throw SqlErrors.translate(e, "Failed to save position");
         }
         return position;
     }
@@ -218,7 +218,7 @@ public final class JdbcPositionRepository implements ru.klimov.hrsystem.reposito
             statement.setLong(1, id);
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException("Failed to delete position", e);
+            throw SqlErrors.translate(e, "Failed to delete position");
         }
     }
 }

@@ -28,7 +28,7 @@ public final class JdbcDepartmentRepository implements DepartmentRepository {
                 update(connection, department);
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Failed to save department", e);
+            throw SqlErrors.translate(e, "Failed to save department");
         }
         return department;
     }
@@ -92,7 +92,7 @@ public final class JdbcDepartmentRepository implements DepartmentRepository {
             statement.setLong(1, id);
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException("Failed to delete department", e);
+            throw SqlErrors.translate(e, "Failed to delete department");
         }
     }
 

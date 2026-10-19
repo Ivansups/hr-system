@@ -36,7 +36,7 @@ public final class JdbcEmployeeRepository implements EmployeeRepository {
                 update(connection, employee);
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Failed to save employee", e);
+            throw SqlErrors.translate(e, "Failed to save employee");
         }
         return employee;
     }
@@ -144,7 +144,7 @@ public final class JdbcEmployeeRepository implements EmployeeRepository {
             statement.setLong(1, id);
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException("Failed to delete employee", e);
+            throw SqlErrors.translate(e, "Failed to delete employee");
         }
     }
 }

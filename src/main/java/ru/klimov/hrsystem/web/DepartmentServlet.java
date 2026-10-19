@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import ru.klimov.hrsystem.dto.DepartmentDto;
+import ru.klimov.hrsystem.exception.ConflictException;
 import ru.klimov.hrsystem.exception.EntityNotFoundException;
 import ru.klimov.hrsystem.exception.ValidationException;
 import ru.klimov.hrsystem.service.DepartmentService;
@@ -53,6 +54,8 @@ public final class DepartmentServlet extends HttpServlet {
             resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
         } catch (EntityNotFoundException e) {
             writeError(resp, HttpServletResponse.SC_NOT_FOUND, e.getMessage());
+        } catch (ConflictException e) {
+            writeError(resp, HttpServletResponse.SC_CONFLICT, e.getMessage());
         } catch (ValidationException e) {
             writeError(resp, HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
         }

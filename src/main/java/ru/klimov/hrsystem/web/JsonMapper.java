@@ -21,7 +21,11 @@ public final class JsonMapper {
 
     public static <T> T fromJson(String json, Class<T> type) {
         try {
-            return MAPPER.readValue(json, type);
+            T value = MAPPER.readValue(json, type);
+            if (value == null) {
+                throw new ValidationException("Request body must not be null");
+            }
+            return value;
         } catch (JsonProcessingException e) {
             throw new ValidationException("Malformed JSON body: " + e.getMessage());
         }

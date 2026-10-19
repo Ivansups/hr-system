@@ -1,10 +1,13 @@
 package ru.klimov.hrsystem.repository.jdbc;
 
 import org.junit.jupiter.api.Test;
+import ru.klimov.hrsystem.exception.ConflictException;
+import ru.klimov.hrsystem.exception.ValidationException;
 import ru.klimov.hrsystem.model.*;
 import ru.klimov.hrsystem.repository.PositionRepository;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,5 +55,28 @@ class JdbcPositionRepositoryTest extends JdbcTestSupport {
         Position saved = repository.save(new DeveloperPosition("Backend Developer", new BigDecimal("2000.00"), "Java", 3));
         repository.deleteById(saved.getId());
         assertTrue(repository.findById(saved.getId()).isEmpty());
+    }
+
+    @Test
+    void deleteByIdThrowsConflictWhenEmployeesReferenceThePosition() {
+        JdbcDepartmentRepository departments = new JdbcDepartmentRepository(dataSource);
+        Department department = departments.save(new Department("Engineering"));
+        Position position = repository.save(new DeveloperPosition("Backend Developer", new BigDecimal("2000.00"), "Java", 3));
+        new JdbcEmployeeRepository(dataSource, departments, repository)
+                .save(new Employee("Ivan Petrov", LocalDate.of(2024, 1, 1), department, position));
+
+        assertThrows(ConflictException.class, () -> repository.deleteById(position.getId()));
+    }
+
+    @Test
+    void saveThrowsValidationWhenTitleIsTooLong() {
+        assertThrows(ValidationException.class,
+                () -> repository.save(new DeveloperPosition("x".repeat(300), new BigDecimal("2000.00"), "Java", 3)));
+    }
+
+    @Test
+    void saveThrowsValidationWhenBaseSalaryOverflowsTheColumn() {
+        assertThrows(ValidationException.class,
+                () -> repository.save(new DeveloperPosition("Backend Developer", new BigDecimal("99999999999"), "Java", 3)));
     }
 }
